@@ -2,6 +2,7 @@
   "name": "web3-test-app",
   "version": "1.0.0",
   "scripts": {
+    "start": "vite --port $PORT",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview --port 8888",
