@@ -4,9 +4,13 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
+    "preview": "vite preview --port 8888",
+    "build:preview": "vite build && vite preview --host --port 8888",
     "lint": "eslint .",
-    "build:css": "tailwindcss -i ./src/index.css -o styles.css --watch"
+    "build:css": "tailwindcss -i ./src/index.css -o styles.css --watch",
+    "git": "git add . && git commit -m",
+    "postgit": "git push origin main",
+    "heroku": "git push heroku main"
   },
   "dependencies": {
     "@headlessui/react": "1.4.3",

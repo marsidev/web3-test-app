@@ -43,7 +43,7 @@ const App = () => {
   }
 
   const getSignerData = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
     await provider.send('eth_requestAccounts', [])
     const signer = provider.getSigner()
     const address = await signer.getAddress()
@@ -52,15 +52,18 @@ const App = () => {
     // const balanceWei = ethers.utils.formatEther(balance)
 
     console.log({ address, chainId })
-    return { signer, address, chainId }
+    return { provider, signer, address, chainId }
   }
 
-  const detectNetwork = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
-    const { chainId } = await getSignerData()
+  const verifyNetwork = (chainId) => {
     if (chainId !== 3) {
       alert('Please connect to Ropsten testnet.')
     }
+  }
+
+  const detectNetwork = async () => {
+    const { provider, chainId } = await getSignerData()
+    verifyNetwork(chainId)
 
     provider.on('network', async (newNetwork, oldNetwork) => {
       if (oldNetwork) {
@@ -68,21 +71,23 @@ const App = () => {
         localStorage.removeItem('userAddress')
 
         const { chainId } = await getSignerData()
-        if (chainId !== 3) {
-          alert('Please connect to Ropsten testnet.')
-        }
+        verifyNetwork(chainId)
       }
     })
   }
 
   useEffect(async () => {
     if (window.ethereum) {
+      // maybe show a prompt to accept read wallet info
+
       await detectNetwork()
 
       const localUserAddress = localStorage.getItem('userAddress')
       if (localUserAddress) {
         setUserAddress(localUserAddress)
       }
+    } else {
+      console.log('window.ethereum not found')
     }
   }, [])
 

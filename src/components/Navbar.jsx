@@ -43,17 +43,31 @@ const CloseIcon = () => {
 }
 
 const Navbar = ({ handleLogin, handleLogout, userAddress }) => {
-  const initialCaption = userAddress
-    ? userAddress.slice(0, 6) + '...' + userAddress.slice(userAddress.length - 4)
-    : 'Connect Wallet'
-
   const [isOpen, setIsOpen] = useState(false)
   const [buttonCaption, setButtonCaption] = useState('')
   const ref = createRef()
 
+  const buttonHoverHandler = () => {
+    if (userAddress) {
+      setButtonCaption('Disconnect')
+    } else {
+      setButtonCaption('Connect Wallet')
+    }
+  }
+
+  const buttonLeaveHandler = () => {
+    if (userAddress) {
+      setButtonCaption(userAddress.slice(0, 6) + '...' + userAddress.slice(userAddress.length - 4))
+    } else {
+      setButtonCaption('Connect Wallet')
+    }
+  }
+
   useEffect(() => {
     if (userAddress) {
       setButtonCaption(userAddress.slice(0, 6) + '...' + userAddress.slice(userAddress.length - 4))
+    } else {
+      setButtonCaption('Connect Wallet')
     }
   }, [userAddress])
 
@@ -93,8 +107,8 @@ const Navbar = ({ handleLogin, handleLogout, userAddress }) => {
                   type='button'
                   className='inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
                   onClick={userAddress ? handleLogout : handleLogin}
-                  onMouseOver={() => setButtonCaption(userAddress ? 'Disconnect' : initialCaption)}
-                  onMouseLeave={() => setButtonCaption(initialCaption)}
+                  onMouseOver={buttonHoverHandler}
+                  onMouseLeave={buttonLeaveHandler}
                 >
                   {buttonCaption}
                 </button>
@@ -148,6 +162,8 @@ const Navbar = ({ handleLogin, handleLogout, userAddress }) => {
                   type='button'
                   className='inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 w-full'
                   onClick={userAddress ? handleLogout : handleLogin}
+                  onMouseOver={buttonHoverHandler}
+                  onMouseLeave={buttonLeaveHandler}
                 >
                   {buttonCaption}
                 </button>
